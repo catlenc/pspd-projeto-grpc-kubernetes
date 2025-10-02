@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "projeto-catalogo/proto"; 
+
+// ----------------- SERVIÇO A: CATÁLOGO -----------------
+
+service Catalogo {
+  rpc GetInfoBasica(ProdutoRequest) returns (InfoBasicaResponse) {}
+}
+
+// ----------------- SERVIÇO B: INVENTÁRIO -----------------
+
+service Inventario {
+  rpc GetEstoque(ProdutoRequest) returns (EstoqueResponse) {}
+}
+
+// ----------------- MENSAGENS COMPARTILHADAS -----------------
+
+message ProdutoRequest {
+  string id = 1;
+}
+
+// Mensagem de resposta do serviço Catalogo (A)
+message InfoBasicaResponse {
+  string id = 1;
+  string nome = 2;
+  string descricao = 3;
+}
+
+// Mensagem de resposta do serviço Inventario (B)
+message EstoqueResponse {
+  string id = 1;
+  double preco = 2;
+  int32 quantidade = 3;
+}
