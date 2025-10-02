@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package calcular_media;
+
+service CalculadorDeMedia {
+  rpc CalcularMedia(stream NumeroRequest) returns (MediaResponse) {}
+}
+
+message NumeroRequest {
+  int32 valor = 1;
+}
+
+message MediaResponse {
+  double valor = 1;
+}
