@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package downloader;
+
+service Downloader {
+  rpc BaixarArquivo(RequisicaoArquivo) returns (stream Chunk) {}
+}
+
+message RequisicaoArquivo {
+  string nome_do_arquivo = 1;
+}
+
+message Chunk {
+  bytes pedaco_de_dados = 1;
+}
