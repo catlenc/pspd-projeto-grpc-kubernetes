@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta de Produtos gRPC</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 2em; background-color: #f0f2f5; }
+        .container { max-width: 600px; margin: auto; padding: 2em; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        input { font-size: 1.1em; padding: 8px; width: 70%; border: 1px solid #ccc; border-radius: 4px; }
+        button { font-size: 1.1em; padding: 8px 12px; border: none; background-color: #007bff; color: white; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #resultado { margin-top: 1.5em; padding: 1em; border: 1px solid #ddd; background-color: #f9f9f9; border-radius: 4px; min-height: 50px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Consultar Produto</h1>
+        <p>Digite o ID do produto (ex: 1 ou 2) para consultar os detalhes via gRPC.</p>
+        <input type="text" id="produtoId" placeholder="ID do produto">
+        <button onclick="consultarProduto()">Consultar</button>
+        <div id="resultado">
+            Aguardando consulta...
+        </div>
+    </div>
+
+    <script>
+        // Esta função será chamada quando o botão for clicado
+        async function consultarProduto() {
+            const id = document.getElementById('produtoId').value;
+            const resultadoDiv = document.getElementById('resultado');
+            
+            if (!id) {
+                resultadoDiv.innerHTML = "<p style='color: red;'>Por favor, digite um ID.</p>";
+                return;
+            }
+
+            resultadoDiv.innerHTML = "Consultando...";
+
+            try {
+                // Esta é a requisição HTTP que o WEB Client faz para o WEB Server (Módulo P)
+                const response = await fetch(`/produtos/${id}`);
+                const data = await response.json();
+
+                // Se a resposta HTTP for bem-sucedida (ex: status 200 OK)
+                if (response.ok) {
+                    resultadoDiv.innerHTML = `
+                        <h3>${data.nome} (ID: ${data.id})</h3>
+                        <p><strong>Descrição:</strong> ${data.descricao}</p>
+                        <p><strong>Preço:</strong> R$ ${data.preco.toFixed(2)}</p>
+                        <p><strong>Estoque:</strong> ${data.quantidade} unidades</p>
+                    `;
+                } else {
+                    // Se o servidor retornar um erro (ex: status 404 Not Found)
+                    resultadoDiv.innerHTML = `<p style='color: red;'><strong>Erro:</strong> ${data.erro}</p>`;
+                }
+            } catch (error) {
+                // Caso haja um erro de rede e não seja possível conectar ao servidor
+                resultadoDiv.innerHTML = "<p style='color: red;'>Erro de conexão ao servidor.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
