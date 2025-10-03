@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, render_template
+import os
 import grpc
 
 import produtos_pb2
@@ -6,8 +7,13 @@ import produtos_pb2_grpc
 
 app = Flask(__name__)
 
-CATALOGO_ADDRESS = 'localhost:50051'
-INVENTARIO_ADDRESS = 'localhost:50052'
+CATALOGO_HOST = os.getenv('MODULO_A_HOST', 'localhost')
+CATALOGO_PORT = os.getenv('MODULO_A_PORT', '50051')
+INVENTARIO_HOST = os.getenv('MODULO_B_HOST', 'localhost')
+INVENTARIO_PORT = os.getenv('MODULO_B_PORT', '50052')
+
+CATALOGO_ADDRESS = f'{CATALOGO_HOST}:{CATALOGO_PORT}'
+INVENTARIO_ADDRESS = f'{INVENTARIO_HOST}:{INVENTARIO_PORT}'
 
 @app.route('/')
 def index():
