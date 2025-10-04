@@ -4,9 +4,12 @@ go 1.23.0
 
 toolchain go1.24.7
 
+replace projeto-catalogo => ../modulo-a
+
 require (
 	google.golang.org/grpc v1.75.1
 	google.golang.org/protobuf v1.36.6
+	projeto-catalogo v0.0.0
 )
 
 require (

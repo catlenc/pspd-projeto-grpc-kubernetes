@@ -8,7 +8,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "projeto-inventario/proto" // ALTERADO: Importa o pacote proto local
+	pb "projeto-catalogo/proto" // ALTERADO: Importa o pacote proto local
 )
 
 type servidor struct {

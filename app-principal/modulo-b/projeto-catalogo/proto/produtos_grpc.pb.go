@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.12
-// source: produtos.proto
+// source: app-principal/produtos.proto
 
 package proto
 
@@ -101,7 +101,7 @@ var Catalogo_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "produtos.proto",
+	Metadata: "app-principal/produtos.proto",
 }
 
 // InventarioClient is the client API for Inventario service.
@@ -187,5 +187,5 @@ var Inventario_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "produtos.proto",
+	Metadata: "app-principal/produtos.proto",
 }
