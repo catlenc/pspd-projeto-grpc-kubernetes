@@ -7,12 +7,12 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
-	
-	pb "projeto-catalogo/proto"
+
+	pb "projeto-inventario/proto" // ALTERADO: Importa o pacote proto local
 )
 
 type servidor struct {
-	pb.UnimplementedInventarioServer 
+	pb.UnimplementedInventarioServer
 }
 
 var estoque = map[string]*pb.EstoqueResponse{
