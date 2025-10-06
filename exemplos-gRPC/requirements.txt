@@ -1,0 +1,7 @@
+# Bibliotecas gRPC para os exemplos
+grpcio==1.75.1
+grpcio-tools==1.60.0
+protobuf==4.25.1
+
+# Dependências comuns
+six==1.16.0

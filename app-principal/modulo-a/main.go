@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"encoding/json"
+    "net/http"
 	"google.golang.org/grpc"
 	pb "projeto-catalogo/proto" 
 )
@@ -31,7 +33,25 @@ func (s *servidor) GetInfoBasica(ctx context.Context, req *pb.ProdutoRequest) (*
 	return nil, fmt.Errorf("produto com ID %s não encontrado", idProduto)
 }
 
+func iniciarServidorHttp() {
+    http.HandleFunc("/produto/", func(w http.ResponseWriter, r *http.Request) {
+        id := r.URL.Path[len("/produto/"):]
+        log.Printf("[REST] Requisição recebida para o produto ID: %v", id)
+
+        produto, existe := produtos[id]
+        if existe {
+            w.Header().Set("Content-Type", "application/json")
+            json.NewEncoder(w).Encode(produto)
+        } else {
+            http.NotFound(w, r)
+        }
+    })
+    log.Println("Servidor REST Catálogo escutando em :8081")
+    http.ListenAndServe(":8081", nil)
+}
+
 func main() {
+	go iniciarServidorHttp()
 	porta := ":50051"
 	lis, err := net.Listen("tcp", porta)
 	if err != nil {
