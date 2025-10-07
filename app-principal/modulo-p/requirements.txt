@@ -6,6 +6,7 @@ click==8.1.6
 blinker==1.7.0
 itsdangerous==2.1.2
 Werkzeug==2.3.7
+requests
 
 # Bibliotecas gRPC
 grpcio==1.75.1
