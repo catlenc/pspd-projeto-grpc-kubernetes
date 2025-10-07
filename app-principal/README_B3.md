@@ -49,7 +49,7 @@ docker build -t modulo-a-img .
 cd ../..
 
 # Navegue até a pasta do módulo B e construa a imagem
-cd app-principal/modulo-b
+cd app-principal
 docker build -t modulo-b-img .
 cd ../..
 
