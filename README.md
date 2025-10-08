@@ -1,9 +1,3 @@
-Com certeza\! Um bom `README.md` é essencial para um portfólio. Com base em todo o seu projeto e no que aprendemos ao colocá-lo a funcionar, preparei um `README` completo e profissional para si.
-
-Pode copiar e colar o texto abaixo diretamente para um ficheiro chamado `README.md` na raiz do seu projeto.
-
------
-
 # Microserviços com gRPC e Kubernetes: Consulta de Produtos
 
 ## 📖 Sobre o Projeto
