@@ -1,13 +1,47 @@
 from flask import Flask, jsonify, render_template
+import os
 import grpc
+import requests
 
 import produtos_pb2
 import produtos_pb2_grpc
 
 app = Flask(__name__)
 
-CATALOGO_ADDRESS = 'localhost:50051'
-INVENTARIO_ADDRESS = 'localhost:50052'
+CATALOGO_HOST = os.getenv('MODULO_A_HOST', 'localhost')
+CATALOGO_PORT = os.getenv('MODULO_A_PORT', '50051')
+INVENTARIO_HOST = os.getenv('MODULO_B_HOST', 'localhost')
+INVENTARIO_PORT = os.getenv('MODULO_B_PORT', '50052')
+
+CATALOGO_ADDRESS = f'{CATALOGO_HOST}:{CATALOGO_PORT}'
+INVENTARIO_ADDRESS = f'{INVENTARIO_HOST}:{INVENTARIO_PORT}'
+
+@app.route('/produtos-rest/<string:produto_id>', methods=['GET'])
+def get_produto_detalhes_rest(produto_id):
+    try:
+        # 1. Chamar o Módulo A via REST
+        resposta_a = requests.get(f'http://localhost:8081/produto/{produto_id}')
+        resposta_a.raise_for_status() # Lança um erro se a resposta for 4xx ou 5xx
+        info_basica = resposta_a.json()
+
+        # 2. Chamar o Módulo B via REST
+        resposta_b = requests.get(f'http://localhost:8082/estoque/{produto_id}')
+        resposta_b.raise_for_status()
+        estoque_info = resposta_b.json()
+
+        # 3. Combinar as respostas
+        resultado_combinado = {
+            "id": info_basica.get("id"),
+            "nome": info_basica.get("nome"),
+            "descricao": info_basica.get("descricao"),
+            "preco": estoque_info.get("preco"),
+            "quantidade": estoque_info.get("quantidade")
+        }
+
+        return jsonify(resultado_combinado)
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"erro": "Falha ao comunicar com os serviços de backend via REST", "detalhes": str(e)}), 500
 
 @app.route('/')
 def index():
@@ -49,4 +83,4 @@ def get_produto_detalhes(produto_id):
 
 if __name__ == '__main__':
     # Roda o servidor web na porta 5000
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5000)

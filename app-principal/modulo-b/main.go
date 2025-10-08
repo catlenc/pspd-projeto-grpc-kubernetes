@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"log"
 	"net"
-
+	"encoding/json"
+    "net/http"
 	"google.golang.org/grpc"
-	
-	pb "projeto-catalogo/proto"
+
+	pb "projeto-catalogo/proto" 
 )
 
 type servidor struct {
-	pb.UnimplementedInventarioServer 
+	pb.UnimplementedInventarioServer
 }
 
 var estoque = map[string]*pb.EstoqueResponse{
@@ -33,7 +34,25 @@ func (s *servidor) GetEstoque(ctx context.Context, req *pb.ProdutoRequest) (*pb.
 	return nil, fmt.Errorf("estoque para o produto com ID %s não encontrado", idProduto)
 }
 
+func iniciarServidorHttp() {
+    http.HandleFunc("/estoque/", func(w http.ResponseWriter, r *http.Request) {
+        id := r.URL.Path[len("/estoque/"):]
+        log.Printf("[REST] Requisição recebida para o estoque do ID: %v", id)
+
+        item, existe := estoque[id]
+        if existe {
+            w.Header().Set("Content-Type", "application/json")
+            json.NewEncoder(w).Encode(item)
+        } else {
+            http.NotFound(w, r)
+        }
+    })
+    log.Println("Servidor REST Inventário escutando em :8082")
+    http.ListenAndServe(":8082", nil)
+}
+
 func main() {
+	go iniciarServidorHttp()
 	porta := ":50052"
 	lis, err := net.Listen("tcp", porta)
 	if err != nil {

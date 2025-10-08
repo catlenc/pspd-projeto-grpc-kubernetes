@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: modulo-b-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: modulo-b
+  template:
+    metadata:
+      labels:
+        app: modulo-b
+    spec:
+      containers:
+      - name: modulo-b
+        image: modulo-b:latest
+        ports:
+        - containerPort: 50052
+        imagePullPolicy: IfNotPresent

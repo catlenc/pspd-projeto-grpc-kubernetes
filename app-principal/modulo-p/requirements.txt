@@ -1,0 +1,16 @@
+# Framework web
+Flask==2.3.2
+Jinja2==3.1.2
+MarkupSafe==2.1.5
+click==8.1.6
+blinker==1.7.0
+itsdangerous==2.1.2
+Werkzeug==2.3.7
+requests
+
+# Bibliotecas gRPC
+grpcio==1.75.1
+protobuf==6.32.1
+
+# Dependências comuns
+six==1.16.0
